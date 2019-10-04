@@ -1,4 +1,6 @@
 import os
+import Node
+from MAPS import Map
 
 filedirector = "/Users/fernandoquevedovallejo/Desktop/Planificacion/master-ipr"
 files = []
@@ -9,9 +11,6 @@ def Maplist(path):
         for directori in d:
             if 'map' in directori:
                 files.append(os.path.join(r, directori))
-    for f in files:
-        print(f)
-
 def GetMAP(path):
     print(path)
     charMap = []
@@ -50,10 +49,16 @@ def GetMAP(path):
                                 elif 'Column' in pline:
                                     END_Y= int(subline[subline.index(pline)+1].strip(',. '))
                         line =fileopen.readline()
-                for line in charMap:
-                    print(line)
-                print(" \n"+str(START_X)+" "+str(START_Y)+" "+str(END_X)+" "+str(END_Y))
-Maplist(filedirector)
-for maps in files:
-    GetMAP(maps)
-print("helloworld")
+                A = Map(START_X,START_Y,END_X,END_Y,path,charMap)
+
+def CreateAllMaps():
+    Maplist(filedirector)
+    for maps in files:
+        GetMAP(maps)
+def CreateMAPnumber(number):
+    Maplist(filedirector)
+    for maps in files:
+        if os.path.join(filedirector,'map'+str(number)) == maps:
+            GetMAP(maps)
+CreateAllMaps()
+CreateMAPnumber(1)
