@@ -1,18 +1,21 @@
 import os
 import Node
 from MAPS import Map
+from Node import Node
+from Solver import Breathfirst
 
 filedirector = "/Users/fernandoquevedovallejo/Desktop/Planificacion/master-ipr"
-files = []
 
+files = []
 def Maplist(path):
+    address = []
     # r=root, d=directories, f = files
     for r, d, f in os.walk(path):
         for directori in d:
             if 'map' in directori:
-                files.append(os.path.join(r, directori))
+                address.append(os.path.join(r, directori))
+    return address
 def GetMAP(path):
-    print(path)
     charMap = []
     START_X = -1
     END_X = -1
@@ -28,7 +31,6 @@ def GetMAP(path):
                             charLine = line.strip().split(',')
                             charMap.append(charLine)
                             line = fileopen.readline()
-                        #print(charMap)
             elif 'README.md' in file:
                 with open(os.path.join(r,file)) as fileopen:
                     line =fileopen.readline()
@@ -49,8 +51,7 @@ def GetMAP(path):
                                 elif 'Column' in pline:
                                     END_Y= int(subline[subline.index(pline)+1].strip(',. '))
                         line =fileopen.readline()
-                A = Map(START_X,START_Y,END_X,END_Y,path,charMap)
-
+        return [Map(START_X,START_Y,END_X,END_Y,path,charMap),Node(START_X,START_Y,-1,-2)]
 def CreateAllMaps():
     Maplist(filedirector)
     for maps in files:
@@ -60,5 +61,11 @@ def CreateMAPnumber(number):
     for maps in files:
         if os.path.join(filedirector,'map'+str(number)) == maps:
             GetMAP(maps)
-CreateAllMaps()
-CreateMAPnumber(1)
+
+MApdirectory= Maplist(filedirector)
+for CurrentMapDir in MApdirectory:
+    print(CurrentMapDir)
+    [CurrentMap,InitialNode]=GetMAP(CurrentMapDir)
+    Breathfirst(CurrentMap,InitialNode)
+
+    #solver

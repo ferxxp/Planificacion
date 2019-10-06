@@ -6,5 +6,10 @@ class Map:
         self.Ey = Ey
         self.Mid = Mid
         self.charMap=charMap
+
+        self.charMap[Sx][Sy]='3'
+        self.charMap[Ex][Ey]='4'
     def dump(self):
         print("---------- x "+str(self.Mid))
+    def getCharMap(self):
+        return self.charMap

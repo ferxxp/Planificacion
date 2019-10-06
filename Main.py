@@ -1,0 +1,3 @@
+import Mapread.py
+
+CreateAllMaps()
