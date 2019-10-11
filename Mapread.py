@@ -61,11 +61,3 @@ def CreateMAPnumber(number):
     for maps in files:
         if os.path.join(filedirector,'map'+str(number)) == maps:
             GetMAP(maps)
-
-MApdirectory= Maplist(filedirector)
-for CurrentMapDir in MApdirectory:
-    print(CurrentMapDir)
-    [CurrentMap,InitialNode]=GetMAP(CurrentMapDir)
-    Breathfirst(CurrentMap,InitialNode)
-
-    #solver
