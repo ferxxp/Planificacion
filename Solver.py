@@ -88,5 +88,4 @@ def Breathfirst(Map,NODE):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
-    print(stoptime-starttime)
-    return[nodes,Solution,-starttime+stoptime]
+    return[done,nodes,Solution,-starttime+stoptime]
