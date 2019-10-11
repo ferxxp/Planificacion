@@ -9,3 +9,5 @@ class Node:
                          " | y "+str(self.y)+\
                          " | id "+str(self.myId)+\
                          " | parentId "+str(self.parentId))
+    def printid(self):
+        return self.myId
