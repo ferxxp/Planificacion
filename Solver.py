@@ -1,13 +1,12 @@
 
 from MAPS import Map
 from Node import Node
-import tkinter as tk
+from MapDisplay import *
 
 
 def dumpMap(charMap):
     for line in charMap:
         print(line)
-
 
 def Breathfirst(Map,NODE):
     nodes = [NODE]
@@ -18,24 +17,14 @@ def Breathfirst(Map,NODE):
     done = False
     goalParentId = -1
 
-    app = tk.Tk()
-    app.title("Map progress")
-    Fprint=tk.Frame(app)
-    label = tk.Label(app,text=str(charMap).replace('\'','').replace(']','\n').replace('[','').replace(',','').replace('0',' '))
-
+    [app,Fprint,label]=StartDisplayMap(charMap)
 
     while not done:
         print("--------------------- number of nodes: "+str(len(nodes)))
 
         for node in nodes:
             #node.dump()
-            Fprint.destroy()
-            label.destroy()
-            Fprint=tk.Frame(app)
-            label = tk.Label(app,text=str(charMap).replace('\'','').replace(']','\n').replace('[','').replace(',','').replace('2','X').replace('0','  '))
-            label.pack()
-            app.update_idletasks()
-            app.update()
+            updateDisplay(charMap,app,Fprint,label)
 
             # up
             tmpX = node.x - 1
