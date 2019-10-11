@@ -2,6 +2,7 @@
 from MAPS import Map
 from Node import Node
 from MapDisplay import *
+import time
 
 def Breathfirst(Map,NODE):
     #set up
@@ -13,6 +14,7 @@ def Breathfirst(Map,NODE):
     #Start display dependencies
     [app,Fprint,label]=StartDisplayMap(charMap)
     #start the algorithm
+    starttime= time.time()
     for node in nodes:
         print(" Number of nodes: "+str(len(nodes)))
         updateDisplay(charMap,app,Fprint,label)
@@ -74,7 +76,7 @@ def Breathfirst(Map,NODE):
             nodes.append(newNode)
         print("------------------------------------------")
 
-
+    stoptime=time.time()
     print("Goal reached")
     ok = False
     app.destroy()
@@ -86,4 +88,5 @@ def Breathfirst(Map,NODE):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
-    return[node,Solution]
+    print(stoptime-starttime)
+    return[node,Solution,starttime-stoptime]
