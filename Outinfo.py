@@ -1,5 +1,6 @@
 
 def writetofile(CurrentMapDir,Solved,time,Nodelist,solution):
+    f.write('\n')
     f=open("out.txt","a")
     f.write(CurrentMapDir+',')
     f.write(str(Solved)+',')
@@ -8,5 +9,4 @@ def writetofile(CurrentMapDir,Solved,time,Nodelist,solution):
     f.write(str(len(solution))+',')
     for node in solution:
         f.write(str(node.printid())+',')
-    f.write('\n')
     f.close()
