@@ -2,7 +2,7 @@ import os
 import Node
 from MAPS import Map
 from Node import Node
-from Solver import Breathfirst
+
 
 filedirector = "/Users/fernandoquevedovallejo/Desktop/Planificacion/master-ipr"
 

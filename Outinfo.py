@@ -1,7 +1,7 @@
 
 def writetofile(CurrentMapDir,Solved,time,Nodelist,solution):
-    f.write('\n')
     f=open("out.txt","a")
+    f.write('\n')
     f.write(CurrentMapDir+',')
     f.write(str(Solved)+',')
     f.write(str(time)+',')

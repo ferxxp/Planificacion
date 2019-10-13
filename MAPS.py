@@ -13,3 +13,7 @@ class Map:
         print("---------- x "+str(self.Mid))
     def getCharMap(self):
         return self.charMap
+    def getXgoal(self):
+        return self.Ex
+    def getYgoal(self):
+        return self.Ey

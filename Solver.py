@@ -3,7 +3,7 @@ from MAPS import Map
 from Node import Node
 from MapDisplay import *
 import time
-
+import math
 def Breathfirst(Map,NODE):
     #set up
     nodes = [NODE]
@@ -90,10 +90,11 @@ def Breathfirst(Map,NODE):
                     ok = True
     return[done,nodes,Solution,-starttime+stoptime]
 
-
+#esto no es A*. hay que cambiarlo
 def A_estrella(Map,NODE):
     #set up
     nodes = [NODE]
+    candidatenodes=[NODE]
     goalParentId = -1
     charMap = Map.getCharMap()
     done = False
@@ -102,24 +103,28 @@ def A_estrella(Map,NODE):
     [app,Fprint,label]=StartDisplayMap(charMap)
     #start the algorithm
     starttime= time.time()
+    print("entro en while")
+    x_goal=Map.getXgoal()
+    y_goal=Map.getYgoal()
 
-    while not nodes:
+    while not done:
+
         print("--------------------- number of nodes: "+str(len(nodes)))
         updateDisplay(charMap,app,Fprint,label)
         #para todos los nodos en nodes;si tu distancia a la meta es minima te expandes;el nodo mas cercano se expande;distancia sqrt((x-xi)^2 + ...)
-
         #[x_goal, y_goal] = Map.getGoal() /// [por definir] Nos da los datos posicion de la meta
-
         min_dist= 100000 #Valor grande, y que sabemos que no habra distancia en nuestros mapas mayor
-        for node in nodes:
-            posible_min= sqrt(((node.x-x_goal)^2)+((node.y-y_goal)^2))
-            if (posible_min< min_dist)
+        for node in candidatenodes:
+            print()
+            posible_min= math.sqrt(pow(node.x-x_goal,2)+pow(node.y-y_goal,2))
+            if (posible_min< min_dist):
                 min_dist=posible_min
                 node_candidato = node
-
         #Node es ahora el candidato y lo expandimos en todas direcciones
         node = node_candidato
 
+        #can not explore same node again
+        candidatenodes.remove(node_candidato)
 
         # up
         tmpX = node.x - 1
@@ -134,6 +139,7 @@ def A_estrella(Map,NODE):
             newNode = Node(tmpX, tmpY, len(nodes), node.myId)
             charMap[tmpX][tmpY] = '2'
             nodes.append(newNode)
+            candidatenodes.append(newNode)
 
         # down
         tmpX = node.x + 1
@@ -148,6 +154,7 @@ def A_estrella(Map,NODE):
             newNode = Node(tmpX, tmpY, len(nodes), node.myId)
             charMap[tmpX][tmpY] = '2'
             nodes.append(newNode)
+            candidatenodes.append(newNode)
 
         # right
         tmpX = node.x
@@ -162,6 +169,7 @@ def A_estrella(Map,NODE):
             newNode = Node(tmpX, tmpY, len(nodes), node.myId)
             charMap[tmpX][tmpY] = '2'
             nodes.append(newNode)
+            candidatenodes.append(newNode)
          # left
         tmpX = node.x
         tmpY = node.y - 1
@@ -175,8 +183,9 @@ def A_estrella(Map,NODE):
             newNode = Node(tmpX, tmpY, len(nodes), node.myId)
             charMap[tmpX][tmpY] = '2'
             nodes.append(newNode)
+            candidatenodes.append(newNode)
         print("------------------------------------------")
-        
+
     stoptime=time.time()
     print("Goal reached")
     ok = False
@@ -190,4 +199,3 @@ def A_estrella(Map,NODE):
                 if( goalParentId == -2):
                     ok = True
     return[done,nodes,Solution,-starttime+stoptime]
-
