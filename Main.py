@@ -7,10 +7,13 @@ for CurrentMapDir in MApdirectory:
     #create Map
     [CurrentMap,InitialNode]=GetMAP(CurrentMapDir)
     #solve map
-    #[Solved,Nodelist,solution,time]=Breathfirst(CurrentMap,InitialNode)
+    [Solved,Nodelist,solution,time]=Breathfirst(CurrentMap,InitialNode)
     #print info
-    #writetofile(CurrentMapDir,Solved,time,Nodelist,solution)
+    writetofile(CurrentMapDir,Solved,time,Nodelist,solution)
     #solve map
+    [CurrentMap,InitialNode]=GetMAP(CurrentMapDir)
     [Solved,Nodelist,solution,time]=A_estrella(CurrentMap,InitialNode)
-    #print info
+    writetofile(CurrentMapDir,Solved,time,Nodelist,solution)
+    [CurrentMap,InitialNode]=GetMAP(CurrentMapDir)
+    [Solved,Nodelist,solution,time]=Dijkstra(CurrentMap,InitialNode)
     writetofile(CurrentMapDir,Solved,time,Nodelist,solution)
