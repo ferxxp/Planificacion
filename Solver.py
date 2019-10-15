@@ -221,8 +221,6 @@ def Dijkstra(Map,NODE):
             if sc < cost:
                 candidatenode=sn
                 cost=sc
-        print(candidatenode.printid())
-        print(cost)
         candidatenodes.remove([candidatenode,cost])
         #exploration
         node = candidatenode
