@@ -91,7 +91,7 @@ def Breathfirst(Map,NODE):
     return[done,nodes,Solution,-starttime+stoptime]
 
 #esto no es A*. hay que cambiarlo
-def GreedyEuclidean(Map,NODE):
+def A_estrella(Map,NODE):
     #set up
     nodes = [NODE]
     candidatenodes=[NODE]
@@ -221,6 +221,8 @@ def Dijkstra(Map,NODE):
             if sc < cost:
                 candidatenode=sn
                 cost=sc
+        print(candidatenode.printid())
+        print(cost)
         candidatenodes.remove([candidatenode,cost])
         #exploration
         node = candidatenode
@@ -519,7 +521,7 @@ def Bidireccional(Map,NODE):
 
     x_goal=Map.getXgoal()
     y_goal=Map.getYgoal()
-    endNode = Node(x_goal, y_goal, 0, -3)
+    endNode = Node(x_goal, y_goal, 0, -2)
 
     candidatenodesEnd = [[endNode,0]]
 
@@ -541,14 +543,14 @@ def Bidireccional(Map,NODE):
                 cost=sc+abs(sn.x-x_goal)+abs(sn.y-y_goal)
         candidatenodes.remove([candidatenode,realcost])
 
-
+        print("Salida")
 
 
         #exploration
         node = candidatenode
         tmpX = node.x - 1
         tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '2e' ): # or charMap[tmpX][tmpY] == 2e
+        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@' ): # or charMap[tmpX][tmpY] == 2e
             print("up: GOALLLL!!!")
             goalParentId = node.myId
             done = True
@@ -563,7 +565,7 @@ def Bidireccional(Map,NODE):
         # down
         tmpX = node.x + 1
         tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '2e' ):
+        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@' ):
             print("down: GOALLLL!!!")
             goalParentId = node.myId
             done = True
@@ -578,7 +580,7 @@ def Bidireccional(Map,NODE):
         # right
         tmpX = node.x
         tmpY = node.y + 1
-        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '2e'):
+        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@'):
             print("right: GOALLLL!!!")
             goalParentId = node.myId
             done = True
@@ -593,7 +595,7 @@ def Bidireccional(Map,NODE):
         # left
         tmpX = node.x
         tmpY = node.y - 1
-        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '2e'):
+        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@'):
             print("left: GOALLLL!!!")
             goalParentId = node.myId
             done = True
@@ -615,18 +617,18 @@ def Bidireccional(Map,NODE):
             if (sce+abs(sne.x-x_start)+abs(sne.y-y_start)) < costEnd:
                 candidatenodeEnd=sne
                 realcostEnd=sce
-                costEnd=ssce+abs(sne.x-x_start)+abs(sne.y-y_start)
+                costEnd=sce+abs(sne.x-x_start)+abs(sne.y-y_start)
         candidatenodesEnd.remove([candidatenodeEnd,realcostEnd])
 
 
 
 
-
+        print("meta")
         #exploration
         node = candidatenodeEnd
         tmpX = node.x - 1
         tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '2'): # or charMap[tmpX][tmpY] == 2
+        if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'): # or charMap[tmpX][tmpY] == 2
             print("up: GOALLLL!!!")
             goalParentId = node.myId
             done = True
@@ -634,14 +636,14 @@ def Bidireccional(Map,NODE):
         elif ( charMap[tmpX][tmpY] == '0' ):
             print("up: mark visited")
             newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2e'. # 2e
+            charMap[tmpX][tmpY] = '@' # 2e
             nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
+            candidatenodesEnd.append([newNode,realcost+1])
 
         # down
         tmpX = node.x + 1
         tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4'or charMap[tmpX][tmpY] == '2' ):
+        if( charMap[tmpX][tmpY] == '3'or charMap[tmpX][tmpY] == '2' ):
             print("down: GOALLLL!!!")
             goalParentId = node.myId
             done = True
@@ -649,14 +651,14 @@ def Bidireccional(Map,NODE):
         elif ( charMap[tmpX][tmpY] == '0' ):
             print("down: mark visited")
             newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2e'
+            charMap[tmpX][tmpY] = '@'
             nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
+            candidatenodesEnd.append([newNode,realcost+1])
 
         # right
         tmpX = node.x
         tmpY = node.y + 1
-        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '2'):
+        if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'):
             print("right: GOALLLL!!!")
             goalParentId = node.myId
             done = True
@@ -664,14 +666,14 @@ def Bidireccional(Map,NODE):
         elif ( charMap[tmpX][tmpY] == '0' ):
             print("right    : mark visited")
             newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2e'
+            charMap[tmpX][tmpY] = '@'
             nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
+            candidatenodesEnd.append([newNode,realcost+1])
 
         # left
         tmpX = node.x
         tmpY = node.y - 1
-        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '2'):
+        if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'):
             print("left: GOALLLL!!!")
             goalParentId = node.myId
             done = True
@@ -679,9 +681,9 @@ def Bidireccional(Map,NODE):
         elif ( charMap[tmpX][tmpY] == '0' ):
             print("left: mark visited")
             newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2e'
+            charMap[tmpX][tmpY] = '@'
             nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
+            candidatenodesEnd.append([newNode,realcost+1])
         print("------------------------------------------")
 
     stoptime=time.time()
@@ -689,11 +691,11 @@ def Bidireccional(Map,NODE):
     ok = False
     app.destroy()
     Solution=[]
-    while not ok:
-        for node in nodes:
-            if( node.myId == goalParentId ):
-                Solution.append(node)
-                goalParentId = node.parentId
-                if( goalParentId == -2):
-                    ok = True
+    #while not ok:
+    #    for node in nodes:
+     #       if( node.myId == goalParentId ):
+      #          Solution.append(node)
+       #         goalParentId = node.parentId
+        #        if( goalParentId == -2):
+         #           ok = True
     return[done,nodes,Solution,-starttime+stoptime]
