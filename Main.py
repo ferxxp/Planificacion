@@ -23,3 +23,8 @@ for CurrentMapDir in MApdirectory:
     [CurrentMap,InitialNode]=GetMAP(CurrentMapDir)
     [Solved,Nodelist,solution,time]=MAnhattan(CurrentMap,InitialNode)
     writetofile(CurrentMapDir,Solved,time,Nodelist,solution)
+    #Works but no output solution
+    [CurrentMap,InitialNode]=GetMAP(CurrentMapDir)
+    [Solved,Nodelist,solution,time]=Bidireccional(CurrentMap,InitialNode)
+    writetofile(CurrentMapDir,Solved,time,Nodelist,solution)
+    
