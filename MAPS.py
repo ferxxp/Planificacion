@@ -17,3 +17,7 @@ class Map:
         return self.Ex
     def getYgoal(self):
         return self.Ey
+    def getXStart(self):
+        return self.Sx
+    def getYStart(self):
+        return self.Sy
