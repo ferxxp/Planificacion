@@ -115,6 +115,8 @@ def A_estrella(Map,NODE):
         #para todos los nodos en nodes;si tu distancia a la meta es minima te expandes;el nodo mas cercano se expande;distancia sqrt((x-xi)^2 + ...)
         #[x_goal, y_goal] = Map.getGoal() /// [por definir] Nos da los datos posicion de la meta
         min_dist= 100000 #Valor grande, y que sabemos que no habra distancia en nuestros mapas mayor
+        node = None
+        node_candidato=None
         for nodesearch in candidatenodes:
             posible_min= math.sqrt(pow(nodesearch.x-x_goal,2)+pow(nodesearch.y-y_goal,2))
             if (posible_min< min_dist):
@@ -124,66 +126,68 @@ def A_estrella(Map,NODE):
         node = node_candidato
 
         #can not explore same node again
-        candidatenodes.remove(node)
+        if node:
+            candidatenodes.remove(node)
+            # up
+            tmpX = node.x - 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("up: GOALLLL!!!")
+                goalParentId = node.myId
+                done
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("up: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append(newNode)
 
-        # up
-        tmpX = node.x - 1
-        tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("up: GOALLLL!!!")
-            goalParentId = node.myId
-            done
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("up: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append(newNode)
+            # down
+            tmpX = node.x + 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("down: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("down: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append(newNode)
 
-        # down
-        tmpX = node.x + 1
-        tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("down: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
+            # right
+            tmpX = node.x
+            tmpY = node.y + 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("right: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("right    : mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append(newNode)
+             # left
+            tmpX = node.x
+            tmpY = node.y - 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("left: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("left: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append(newNode)
+        else:
             break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("down: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append(newNode)
-
-        # right
-        tmpX = node.x
-        tmpY = node.y + 1
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("right: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("right    : mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append(newNode)
-         # left
-        tmpX = node.x
-        tmpY = node.y - 1
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("left: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("left: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append(newNode)
         print("------------------------------------------")
 
     stoptime=time.time()
@@ -217,73 +221,76 @@ def Dijkstra(Map,NODE):
         #select appropiate node
         updateDisplay(charMap,app,Fprint,label)
         cost=1000
+        node = None
+        candidatenode=None
         for sn,sc in candidatenodes:
             if sc < cost:
                 candidatenode=sn
                 cost=sc
-        print(candidatenode.printid())
-        print(cost)
-        candidatenodes.remove([candidatenode,cost])
-        #exploration
-        node = candidatenode
-        tmpX = node.x - 1
-        tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("up: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("up: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,cost+1])
+        if candidatenode:
+            candidatenodes.remove([candidatenode,cost])
+            #exploration
+            node = candidatenode
+            tmpX = node.x - 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("up: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("up: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,cost+1])
 
-        # down
-        tmpX = node.x + 1
-        tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("down: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("down: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,cost+1])
+            # down
+            tmpX = node.x + 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("down: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("down: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,cost+1])
 
-        # right
-        tmpX = node.x
-        tmpY = node.y + 1
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("right: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("right    : mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,cost+1])
+            # right
+            tmpX = node.x
+            tmpY = node.y + 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("right: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("right    : mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,cost+1])
 
-        # left
-        tmpX = node.x
-        tmpY = node.y - 1
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("left: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
+            # left
+            tmpX = node.x
+            tmpY = node.y - 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("left: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("left: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,cost+1])
+        else:
             break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("left: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,cost+1])
         print("------------------------------------------")
 
     stoptime=time.time()
@@ -320,74 +327,77 @@ def DijkstraA(Map,NODE):
         #select appropiate node
         updateDisplay(charMap,app,Fprint,label)
         cost=1000
+        node = None
+        candidatenode=None
         for sn,sc in candidatenodes:
             if (sc+math.sqrt(pow(sn.x-x_goal,2)+pow(sn.y-y_goal,2))) < cost:
                 candidatenode=sn
                 realcost=sc
                 cost=sc+math.sqrt(pow(sn.x-x_goal,2)+pow(sn.y-y_goal,2))
-        print(candidatenode.printid())
-        print(cost)
-        candidatenodes.remove([candidatenode,realcost])
-        #exploration
-        node = candidatenode
-        tmpX = node.x - 1
-        tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("up: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("up: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
+        if candidatenode:
+            candidatenodes.remove([candidatenode,realcost])
+            #exploration
+            node = candidatenode
+            tmpX = node.x - 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("up: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("up: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,realcost+1])
 
-        # down
-        tmpX = node.x + 1
-        tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("down: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("down: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
+            # down
+            tmpX = node.x + 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("down: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("down: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,realcost+1])
 
-        # right
-        tmpX = node.x
-        tmpY = node.y + 1
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("right: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("right    : mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
+            # right
+            tmpX = node.x
+            tmpY = node.y + 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("right: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("right    : mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,realcost+1])
 
-        # left
-        tmpX = node.x
-        tmpY = node.y - 1
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("left: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
+            # left
+            tmpX = node.x
+            tmpY = node.y - 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("left: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("left: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,realcost+1])
+        else:
             break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("left: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
         print("------------------------------------------")
 
     stoptime=time.time()
@@ -424,72 +434,77 @@ def MAnhattan(Map,NODE):
         #select appropiate node
         updateDisplay(charMap,app,Fprint,label)
         cost=1000
+        node = None
+        candidatenode=None
         for sn,sc in candidatenodes:
             if (sc+abs(sn.x-x_goal)+abs(sn.y-y_goal)) < cost:
                 candidatenode=sn
                 realcost=sc
                 cost=sc+abs(sn.x-x_goal)+abs(sn.y-y_goal)
-        candidatenodes.remove([candidatenode,realcost])
-        #exploration
-        node = candidatenode
-        tmpX = node.x - 1
-        tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("up: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("up: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
+        if candidatenode:
+            candidatenodes.remove([candidatenode,realcost])
+            #exploration
+            node = candidatenode
+            tmpX = node.x - 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("up: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("up: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,realcost+1])
 
-        # down
-        tmpX = node.x + 1
-        tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("down: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("down: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
+            # down
+            tmpX = node.x + 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("down: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("down: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,realcost+1])
 
-        # right
-        tmpX = node.x
-        tmpY = node.y + 1
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("right: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("right    : mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
+            # right
+            tmpX = node.x
+            tmpY = node.y + 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("right: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("right    : mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,realcost+1])
 
-        # left
-        tmpX = node.x
-        tmpY = node.y - 1
-        if( charMap[tmpX][tmpY] == '4' ):
-            print("left: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
+            # left
+            tmpX = node.x
+            tmpY = node.y - 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("left: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("left: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,realcost+1])
+        else:
             break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("left: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
         print("------------------------------------------")
 
     stoptime=time.time()
@@ -509,7 +524,7 @@ def MAnhattan(Map,NODE):
 def Bidireccional(Map,NODE):
     #set up
     nodes = [NODE]
-    candidatenodes = [[NODE,0]] 
+    candidatenodes = [[NODE,0]]
     goalParentId = -1
     charMap = Map.getCharMap()
     done = False
@@ -536,76 +551,81 @@ def Bidireccional(Map,NODE):
         updateDisplay(charMap,app,Fprint,label)
         #select node from start
         cost=1000
+        node = None
+        candidatenode=None
         for sn,sc in candidatenodes:
             if (sc+abs(sn.x-x_goal)+abs(sn.y-y_goal)) < cost:
                 candidatenode=sn
                 realcost=sc
                 cost=sc+abs(sn.x-x_goal)+abs(sn.y-y_goal)
-        candidatenodes.remove([candidatenode,realcost])
+        if candidatenode:
+            candidatenodes.remove([candidatenode,realcost])
 
-        print("Salida")
+            print("Salida")
 
 
-        #exploration
-        node = candidatenode
-        tmpX = node.x - 1
-        tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@' ): # or charMap[tmpX][tmpY] == 2e
-            print("up: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
+            #exploration
+            node = candidatenode
+            tmpX = node.x - 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@' ): # or charMap[tmpX][tmpY] == 2e
+                print("up: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("up: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,realcost+1])
+
+            # down
+            tmpX = node.x + 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@' ):
+                print("down: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("down: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,realcost+1])
+
+            # right
+            tmpX = node.x
+            tmpY = node.y + 1
+            if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@'):
+                print("right: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("right    : mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,realcost+1])
+
+            # left
+            tmpX = node.x
+            tmpY = node.y - 1
+            if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@'):
+                print("left: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("left: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,realcost+1])
+        else:
             break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("up: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
-
-        # down
-        tmpX = node.x + 1
-        tmpY = node.y
-        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@' ):
-            print("down: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("down: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
-
-        # right
-        tmpX = node.x
-        tmpY = node.y + 1
-        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@'):
-            print("right: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("right    : mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
-
-        # left
-        tmpX = node.x
-        tmpY = node.y - 1
-        if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@'):
-            print("left: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("left: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '2'
-            nodes.append(newNode)
-            candidatenodes.append([newNode,realcost+1])
         print("------------------------------------------")
 
 
@@ -613,77 +633,79 @@ def Bidireccional(Map,NODE):
 
         #select node from end
         costEnd=1000
+        node = None
+        candidatenodeEnd=None
         for sne,sce in candidatenodesEnd:
             if (sce+abs(sne.x-x_start)+abs(sne.y-y_start)) < costEnd:
                 candidatenodeEnd=sne
                 realcostEnd=sce
                 costEnd=sce+abs(sne.x-x_start)+abs(sne.y-y_start)
-        candidatenodesEnd.remove([candidatenodeEnd,realcostEnd])
 
+        if candidatenodeEnd:
+            candidatenodesEnd.remove([candidatenodeEnd,realcostEnd])
+            print("meta")
+            #exploration
+            node = candidatenodeEnd
+            tmpX = node.x - 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'): # or charMap[tmpX][tmpY] == 2
+                print("up: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("up: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '@' # 2e
+                nodes.append(newNode)
+                candidatenodesEnd.append([newNode,realcost+1])
 
+            # down
+            tmpX = node.x + 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '3'or charMap[tmpX][tmpY] == '2' ):
+                print("down: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("down: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '@'
+                nodes.append(newNode)
+                candidatenodesEnd.append([newNode,realcost+1])
 
+            # right
+            tmpX = node.x
+            tmpY = node.y + 1
+            if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'):
+                print("right: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("right    : mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '@'
+                nodes.append(newNode)
+                candidatenodesEnd.append([newNode,realcost+1])
 
-        print("meta")
-        #exploration
-        node = candidatenodeEnd
-        tmpX = node.x - 1
-        tmpY = node.y
-        if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'): # or charMap[tmpX][tmpY] == 2
-            print("up: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
+            # left
+            tmpX = node.x
+            tmpY = node.y - 1
+            if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'):
+                print("left: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("left: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '@'
+                nodes.append(newNode)
+                candidatenodesEnd.append([newNode,realcost+1])
+        else:
             break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("up: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '@' # 2e
-            nodes.append(newNode)
-            candidatenodesEnd.append([newNode,realcost+1])
-
-        # down
-        tmpX = node.x + 1
-        tmpY = node.y
-        if( charMap[tmpX][tmpY] == '3'or charMap[tmpX][tmpY] == '2' ):
-            print("down: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("down: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '@'
-            nodes.append(newNode)
-            candidatenodesEnd.append([newNode,realcost+1])
-
-        # right
-        tmpX = node.x
-        tmpY = node.y + 1
-        if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'):
-            print("right: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("right    : mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '@'
-            nodes.append(newNode)
-            candidatenodesEnd.append([newNode,realcost+1])
-
-        # left
-        tmpX = node.x
-        tmpY = node.y - 1
-        if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'):
-            print("left: GOALLLL!!!")
-            goalParentId = node.myId
-            done = True
-            break
-        elif ( charMap[tmpX][tmpY] == '0' ):
-            print("left: mark visited")
-            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
-            charMap[tmpX][tmpY] = '@'
-            nodes.append(newNode)
-            candidatenodesEnd.append([newNode,realcost+1])
         print("------------------------------------------")
 
     stoptime=time.time()
