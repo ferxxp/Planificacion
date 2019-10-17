@@ -4,6 +4,7 @@ from Node import Node
 from MapDisplay import *
 import time
 import math
+import random
 def Breathfirst(Map,NODE):
     #set up
     nodes = [NODE]
@@ -229,6 +230,105 @@ def Dijkstra(Map,NODE):
                 cost=sc
         if candidatenode:
             candidatenodes.remove([candidatenode,cost])
+            #exploration
+            node = candidatenode
+            tmpX = node.x - 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("up: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("up: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,cost+1])
+
+            # down
+            tmpX = node.x + 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("down: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("down: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,cost+1])
+
+            # right
+            tmpX = node.x
+            tmpY = node.y + 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("right: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("right    : mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,cost+1])
+
+            # left
+            tmpX = node.x
+            tmpY = node.y - 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("left: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("left: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,cost+1])
+        else:
+            break
+        print("------------------------------------------")
+
+    stoptime=time.time()
+    print("Goal reached")
+    ok = False
+    app.destroy()
+    Solution=[]
+    while not ok:
+        for node in nodes:
+            if( node.myId == goalParentId ):
+                Solution.append(node)
+                goalParentId = node.parentId
+                if( goalParentId == -2):
+                    ok = True
+    return[done,nodes,Solution,-starttime+stoptime]
+
+def Ransom(Map,NODE):
+    #set up
+    nodes = [NODE]
+    candidatenodes = [[NODE,0]]
+    goalParentId = -1
+    charMap = Map.getCharMap()
+    done = False
+    goalParentId = -1
+    cost=0;
+    #Start display dependencies
+    [app,Fprint,label]=StartDisplayMap(charMap)
+    #start the algorithm
+    starttime= time.time()
+    while not done:
+        #select appropiate node
+        updateDisplay(charMap,app,Fprint,label)
+
+        if candidatenodes:
+            print(random.randint(0,len(candidatenodes)))
+            [candidatenode,ignore]=candidatenodes[random.randint(0,len(candidatenodes)-1)]
+            candidatenodes.remove([candidatenode,ignore])
             #exploration
             node = candidatenode
             tmpX = node.x - 1
