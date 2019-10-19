@@ -831,7 +831,7 @@ def Bidireccional(Map,NODE):
                 print(goalParentId)
                 if( node.myId == goalParentId ):
                     print("stuck")
-                    Solution.append(node)
+                    Solution.insert(0,node)
                     goalParentId = node.parentId
                     if( goalParentId == -3):
                         ok = True
