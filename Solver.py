@@ -636,7 +636,8 @@ def Bidireccional(Map,NODE):
 
     x_goal=Map.getXgoal()
     y_goal=Map.getYgoal()
-    endNode = Node(x_goal, y_goal, 0, -2)
+    endNode = Node(x_goal, y_goal, 0, -3)
+    nodes.append(endNode)
 
     candidatenodesEnd = [[endNode,0]]
 
@@ -808,16 +809,31 @@ def Bidireccional(Map,NODE):
             break
         print("------------------------------------------")
 
+
     stoptime=time.time()
-    print("Goal reached")
-    ok = False
-    app.destroy()
     Solution=[]
-    #while not ok:
-    #    for node in nodes:
-     #       if( node.myId == goalParentId ):
-      #          Solution.append(node)
-       #         goalParentId = node.parentId
-        #        if( goalParentId == -2):
-         #           ok = True
+    if done:
+        goalParentId = candidatenode.parentId
+        ok = False
+        #app.destroy()
+
+        while not ok:
+            for node in nodes:
+                if( node.myId == goalParentId ):
+                    Solution.append(node)
+                    goalParentId = node.parentId
+                    if( goalParentId == -2):
+                        ok = True
+        goalParentId = candidatenodeEnd.parentId
+        ok = False
+        while not ok:
+            for node in nodes:
+                print(goalParentId)
+                if( node.myId == goalParentId ):
+                    print("stuck")
+                    Solution.append(node)
+                    goalParentId = node.parentId
+                    if( goalParentId == -3):
+                        ok = True
+        print("stuck out")
     return[done,nodes,Solution,-starttime+stoptime]
