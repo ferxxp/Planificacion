@@ -91,7 +91,6 @@ def Breathfirst(Map,NODE):
                     ok = True
     return[done,nodes,Solution,-starttime+stoptime]
 
-#esto no es A*. hay que cambiarlo
 def A_estrella(Map,NODE):
     #set up
     nodes = [NODE]
@@ -836,4 +835,90 @@ def Bidireccional(Map,NODE):
                     if( goalParentId == -3):
                         ok = True
         print("stuck out")
+    return[done,nodes,Solution,-starttime+stoptime]
+
+def Breathfirstclean(Map,NODE):
+    #set up
+    nodes = [NODE]
+    goalParentId = -1
+    charMap = Map.getCharMap()
+    done = False
+    goalParentId = -1
+    #Start display dependencies
+    [app,Fprint,label]=StartDisplayclean(charMap)
+    #start the algorithm
+    starttime= time.time()
+    for node in nodes:
+        print(" Number of nodes: "+str(len(nodes)))
+        updateDisplayclean(charMap,app,Fprint)
+
+        # up
+        tmpX = node.x - 1
+        tmpY = node.y
+        if( charMap[tmpX][tmpY] == '4' ):
+            print("up: GOALLLL!!!")
+            goalParentId = node.myId
+            done = True
+            break
+        elif ( charMap[tmpX][tmpY] == '0' ):
+            print("up: mark visited")
+            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+            charMap[tmpX][tmpY] = '2'
+            nodes.append(newNode)
+
+        # down
+        tmpX = node.x + 1
+        tmpY = node.y
+        if( charMap[tmpX][tmpY] == '4' ):
+            print("down: GOALLLL!!!")
+            goalParentId = node.myId
+            done = True
+            break
+        elif ( charMap[tmpX][tmpY] == '0' ):
+            print("down: mark visited")
+            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+            charMap[tmpX][tmpY] = '2'
+            nodes.append(newNode)
+
+        # right
+        tmpX = node.x
+        tmpY = node.y + 1
+        if( charMap[tmpX][tmpY] == '4' ):
+            print("right: GOALLLL!!!")
+            goalParentId = node.myId
+            done = True
+            break
+        elif ( charMap[tmpX][tmpY] == '0' ):
+            print("right    : mark visited")
+            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+            charMap[tmpX][tmpY] = '2'
+            nodes.append(newNode)
+
+        # left
+        tmpX = node.x
+        tmpY = node.y - 1
+        if( charMap[tmpX][tmpY] == '4' ):
+            print("left: GOALLLL!!!")
+            goalParentId = node.myId
+            done = True
+            break
+        elif ( charMap[tmpX][tmpY] == '0' ):
+            print("left: mark visited")
+            newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+            charMap[tmpX][tmpY] = '2'
+            nodes.append(newNode)
+        print("------------------------------------------")
+
+    stoptime=time.time()
+    print("Goal reached")
+    ok = False
+    Solution=[]
+    while not ok:
+        for node in nodes:
+            if( node.myId == goalParentId ):
+                Solution.append(node)
+                goalParentId = node.parentId
+                if( goalParentId == -2):
+                    ok = True
+    addsolutionclean(app,Solution)
     return[done,nodes,Solution,-starttime+stoptime]
