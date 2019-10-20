@@ -8,7 +8,7 @@ for CurrentMapDir in MApdirectory:
     dumpMap(CurrentMap.charMap)
     print(len(CurrentMap.charMap))
     print(len(CurrentMap.charMap[0]))
-    [Solved,Nodelist,solution,time]=Breathfirstclean(CurrentMap,InitialNode)
+    [Solved,Nodelist,solution,time]=Bidireccionalclean(CurrentMap,InitialNode)
 
     # #solve map
     # [Solved,Nodelist,solution,time]=Breathfirst(CurrentMap,InitialNode)

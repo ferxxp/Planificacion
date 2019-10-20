@@ -5,7 +5,6 @@ import tkinter as tk
 def dumpMap(charMap):
     for line in charMap:
         print(line)
-
 def StartDisplayMap(charMap):
     app = tk.Tk()
     app.title("Map progress")
@@ -50,6 +49,9 @@ def updateDisplayclean(charMap,app,Fprint):
             if char =='2':
                 a=app.grid_slaves(l,c)[0]
                 a.config(bg='orange')
+            if char =='@':
+                a=app.grid_slaves(l,c)[0]
+                a.config(bg='pink')
             c=c+1
         l=l+1
     app.update_idletasks()
