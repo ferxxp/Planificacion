@@ -210,6 +210,122 @@ def Greedy_Euclideo(Map,NODE,visual):
     addsolutionclean(app,Solution)
     return[done,nodes,Solution,-starttime+stoptime]
 
+def Greedy_Manhattan(Map,NODE,visual):
+    #set up
+    nodes = [NODE]
+    candidatenodes=[NODE]
+    goalParentId = -1
+    charMap = Map.getCharMap()
+    done = False
+    goalParentId = -1
+    #Start display dependencies
+    if visual:
+        [app,Fprint,label]=StartDisplayclean(charMap)
+    #start the algorithm
+    starttime= time.time()
+    print(charMap)
+    x_goal=Map.getXgoal()
+    y_goal=Map.getYgoal()
+
+    while not done:
+
+        print("--------------------- number of nodes: "+str(len(nodes)))
+        print("--------------------- number of nodes: "+str(len(candidatenodes)))
+        if visual:
+            updateDisplayclean(charMap,app,Fprint)
+        #para todos los nodos en nodes;si tu distancia a la meta es minima te expandes;el nodo mas cercano se expande;distancia sqrt((x-xi)^2 + ...)
+        #[x_goal, y_goal] = Map.getGoal() /// [por definir] Nos da los datos posicion de la meta
+        min_dist= 100000 #Valor grande, y que sabemos que no habra distancia en nuestros mapas mayor
+        node = None
+        node_candidato=None
+        for nodesearch in candidatenodes:
+            posible_min= (abs(nodesearch.x-x_goal)+abs(nodesearch.y-y_goal))
+            if (posible_min< min_dist):
+                min_dist=posible_min
+                node_candidato = nodesearch
+        #Node es ahora el candidato y lo expandimos en todas direcciones
+        node = node_candidato
+
+        #can not explore same node again
+        if node:
+            candidatenodes.remove(node)
+            # up
+            tmpX = node.x - 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("up: GOALLLL!!!")
+                goalParentId = node.myId
+                done
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("up: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append(newNode)
+
+            # down
+            tmpX = node.x + 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("down: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("down: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append(newNode)
+
+            # right
+            tmpX = node.x
+            tmpY = node.y + 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("right: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("right    : mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append(newNode)
+             # left
+            tmpX = node.x
+            tmpY = node.y - 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("left: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("left: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append(newNode)
+        else:
+            break
+        print("------------------------------------------")
+
+    stoptime=time.time()
+    print("Goal reached")
+    ok = False
+
+    Solution=[]
+    while not ok:
+        for node in nodes:
+            if( node.myId == goalParentId ):
+                Solution.append(node)
+                goalParentId = node.parentId
+                if( goalParentId == -2):
+                    ok = True
+    addsolutionclean(app,Solution)
+    return[done,nodes,Solution,-starttime+stoptime]
+
 def Dijkstra(Map,NODE,visual):
     #set up
     nodes = [NODE]
