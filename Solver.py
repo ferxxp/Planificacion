@@ -5,7 +5,7 @@ from MapDisplay import *
 import time
 import math
 import random
-def Breathfirst(Map,NODE):
+def Breathfirst(Map,NODE,visual):
     #set up
     nodes = [NODE]
     goalParentId = -1
@@ -13,12 +13,14 @@ def Breathfirst(Map,NODE):
     done = False
     goalParentId = -1
     #Start display dependencies
-    [app,Fprint,label]=StartDisplayMap(charMap)
+    if visual:
+        [app,Fprint,label]=StartDisplayclean(charMap)
     #start the algorithm
     starttime= time.time()
     for node in nodes:
         print(" Number of nodes: "+str(len(nodes)))
-        updateDisplay(charMap,app,Fprint,label)
+        if visual:
+            updateDisplayclean(charMap,app,Fprint)
 
         # up
         tmpX = node.x - 1
@@ -80,7 +82,7 @@ def Breathfirst(Map,NODE):
     stoptime=time.time()
     print("Goal reached")
     ok = False
-    app.destroy()
+
     Solution=[]
     while not ok:
         for node in nodes:
@@ -89,9 +91,10 @@ def Breathfirst(Map,NODE):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
+    addsolutionclean(app,Solution)
     return[done,nodes,Solution,-starttime+stoptime]
 
-def A_estrella(Map,NODE):
+def A_estrella(Map,NODE,visual):
     #set up
     nodes = [NODE]
     candidatenodes=[NODE]
@@ -100,7 +103,8 @@ def A_estrella(Map,NODE):
     done = False
     goalParentId = -1
     #Start display dependencies
-    [app,Fprint,label]=StartDisplayMap(charMap)
+    if visual:
+        [app,Fprint,label]=StartDisplayclean(charMap)
     #start the algorithm
     starttime= time.time()
     print(charMap)
@@ -111,7 +115,8 @@ def A_estrella(Map,NODE):
 
         print("--------------------- number of nodes: "+str(len(nodes)))
         print("--------------------- number of nodes: "+str(len(candidatenodes)))
-        updateDisplay(charMap,app,Fprint,label)
+        if visual:
+            updateDisplayclean(charMap,app,Fprint)
         #para todos los nodos en nodes;si tu distancia a la meta es minima te expandes;el nodo mas cercano se expande;distancia sqrt((x-xi)^2 + ...)
         #[x_goal, y_goal] = Map.getGoal() /// [por definir] Nos da los datos posicion de la meta
         min_dist= 100000 #Valor grande, y que sabemos que no habra distancia en nuestros mapas mayor
@@ -193,7 +198,7 @@ def A_estrella(Map,NODE):
     stoptime=time.time()
     print("Goal reached")
     ok = False
-    app.destroy()
+
     Solution=[]
     while not ok:
         for node in nodes:
@@ -202,9 +207,10 @@ def A_estrella(Map,NODE):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
+    addsolutionclean(app,Solution)
     return[done,nodes,Solution,-starttime+stoptime]
 
-def Dijkstra(Map,NODE):
+def Dijkstra(Map,NODE,visual):
     #set up
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
@@ -214,12 +220,14 @@ def Dijkstra(Map,NODE):
     goalParentId = -1
     cost=0;
     #Start display dependencies
-    [app,Fprint,label]=StartDisplayMap(charMap)
+    if visual:
+        [app,Fprint,label]=StartDisplayclean(charMap)
     #start the algorithm
     starttime= time.time()
     while not done:
         #select appropiate node
-        updateDisplay(charMap,app,Fprint,label)
+        if visual:
+            updateDisplayclean(charMap,app,Fprint)
         cost=1000
         node = None
         candidatenode=None
@@ -296,7 +304,7 @@ def Dijkstra(Map,NODE):
     stoptime=time.time()
     print("Goal reached")
     ok = False
-    app.destroy()
+
     Solution=[]
     while not ok:
         for node in nodes:
@@ -305,9 +313,10 @@ def Dijkstra(Map,NODE):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
+    addsolutionclean(app,Solution)
     return[done,nodes,Solution,-starttime+stoptime]
 
-def Ransom(Map,NODE):
+def Ransom(Map,NODE,visual):
     #set up
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
@@ -317,12 +326,14 @@ def Ransom(Map,NODE):
     goalParentId = -1
     cost=0;
     #Start display dependencies
-    [app,Fprint,label]=StartDisplayMap(charMap)
+    if visual:
+        [app,Fprint,label]=StartDisplayclean(charMap)
     #start the algorithm
     starttime= time.time()
     while not done:
         #select appropiate node
-        updateDisplay(charMap,app,Fprint,label)
+        if visual:
+            updateDisplayclean(charMap,app,Fprint)
 
         if candidatenodes:
             print(random.randint(0,len(candidatenodes)))
@@ -395,7 +406,7 @@ def Ransom(Map,NODE):
     stoptime=time.time()
     print("Goal reached")
     ok = False
-    app.destroy()
+
     Solution=[]
     while not ok:
         for node in nodes:
@@ -404,9 +415,10 @@ def Ransom(Map,NODE):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
+    addsolutionclean(app,Solution)
     return[done,nodes,Solution,-starttime+stoptime]
 
-def DijkstraA(Map,NODE):
+def DijkstraA(Map,NODE,visual):
     #set up
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
@@ -418,13 +430,15 @@ def DijkstraA(Map,NODE):
     x_goal=Map.getXgoal()
     y_goal=Map.getYgoal()
     #Start display dependencies
-    [app,Fprint,label]=StartDisplayMap(charMap)
+    if visual:
+        [app,Fprint,label]=StartDisplayclean(charMap)
     #start the algorithm
     starttime= time.time()
     realcost=0
     while not done:
         #select appropiate node
-        updateDisplay(charMap,app,Fprint,label)
+        if visual:
+            updateDisplayclean(charMap,app,Fprint)
         cost=1000
         node = None
         candidatenode=None
@@ -502,7 +516,7 @@ def DijkstraA(Map,NODE):
     stoptime=time.time()
     print("Goal reached")
     ok = False
-    app.destroy()
+
     Solution=[]
     while not ok:
         for node in nodes:
@@ -511,9 +525,11 @@ def DijkstraA(Map,NODE):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
+
+    addsolutionclean(app,Solution)
     return[done,nodes,Solution,-starttime+stoptime]
 
-def MAnhattan(Map,NODE):
+def MAnhattan(Map,NODE,visual):
     #set up
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
@@ -525,13 +541,15 @@ def MAnhattan(Map,NODE):
     x_goal=Map.getXgoal()
     y_goal=Map.getYgoal()
     #Start display dependencies
-    [app,Fprint,label]=StartDisplayMap(charMap)
+    if visual:
+        [app,Fprint,label]=StartDisplayclean(charMap)
     #start the algorithm
     starttime= time.time()
     realcost=0;
     while not done:
         #select appropiate node
-        updateDisplay(charMap,app,Fprint,label)
+        if visual:
+            updateDisplayclean(charMap,app,Fprint)
         cost=1000
         node = None
         candidatenode=None
@@ -609,7 +627,7 @@ def MAnhattan(Map,NODE):
     stoptime=time.time()
     print("Goal reached")
     ok = False
-    app.destroy()
+
     Solution=[]
     while not ok:
         for node in nodes:
@@ -618,9 +636,10 @@ def MAnhattan(Map,NODE):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
+    addsolutionclean(app,Solution)
     return[done,nodes,Solution,-starttime+stoptime]
 
-def Bidireccional(Map,NODE):
+def Bidireccional(Map,NODE,visual):
     #set up
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
@@ -641,14 +660,16 @@ def Bidireccional(Map,NODE):
     candidatenodesEnd = [[endNode,0]]
 
     #Start display dependencies
-    [app,Fprint,label]=StartDisplayMap(charMap)
+    if visual:
+        [app,Fprint,label]=StartDisplayclean(charMap)
     #start the algorithm
     starttime= time.time()
     realcost=0;
     realcostEnd=0
     while not done:
         #select appropiate node
-        updateDisplay(charMap,app,Fprint,label)
+        if visual:
+            updateDisplayclean(charMap,app,Fprint)
         #select node from start
         cost=1000
         node = None
@@ -814,7 +835,8 @@ def Bidireccional(Map,NODE):
     if done:
         goalParentId = candidatenode.parentId
         ok = False
-        #app.destroy()
+        #if visual:
+            #app.destroy()
 
         while not ok:
             for node in nodes:
@@ -834,10 +856,11 @@ def Bidireccional(Map,NODE):
                     goalParentId = node.parentId
                     if( goalParentId == -3):
                         ok = True
-        print("stuck out")
+
+    addsolutionclean(app,Solution)
     return[done,nodes,Solution,-starttime+stoptime]
 
-def Bidireccionalclean(Map,NODE):
+def Bidireccionalclean(Map,NODE,visual):
     #set up
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
@@ -1048,7 +1071,7 @@ def Bidireccionalclean(Map,NODE):
     Solution=[]
     if done:
         ok = False
-        #app.destroy()
+        #if visual:app.destroy()
         while not ok:
             for node in nodes:
                 if( node.myId == goalParentId ):
@@ -1073,7 +1096,7 @@ def Bidireccionalclean(Map,NODE):
     addsolutionclean(app,Solution)
     return[done,nodes,Solution,-starttime+stoptime]
 
-def Breathfirstclean(Map,NODE):
+def Breathfirstclean(Map,NODE,visual):
     #set up
     nodes = [NODE]
     goalParentId = -1
