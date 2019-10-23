@@ -16,9 +16,9 @@ def updateDisplay(charMap,app,Fprint,label):
     label.pack()
     app.update_idletasks()
     app.update()
-def StartDisplayclean(charMap):
+def StartDisplayclean(charMap,Mapname,Solver):
     app = tk.Tk()
-    app.title("Map progress")
+    app.title("Map progress "+Mapname+" "+Solver)
     Fprint=tk.Frame(app)
     l=0
     for line in charMap:
@@ -49,6 +49,9 @@ def updateDisplayclean(charMap,app,Fprint):
             if char =='2':
                 a=app.grid_slaves(l,c)[0]
                 a.config(bg='orange')
+            if char =='5':
+                a=app.grid_slaves(l,c)[0]
+                a.config(bg='gray')
             if char =='@':
                 a=app.grid_slaves(l,c)[0]
                 a.config(bg='pink')
