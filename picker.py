@@ -86,3 +86,8 @@ while True:
         writetofile(MApname,"BidireccionalE",Solved,time,Nodelist,NNodesVisited,solution)
     elif modes==9:
         print("In idea ocean")
+        [CurrentMap,InitialNode]=GetMAP(MApdirectory[modem])
+        #solve map
+        [Solved,Nodelist,NNodesVisited,solution,time]=Explorer(MApname,CurrentMap,InitialNode,True)
+        #print info
+        writetofile(MApname,"Explorer",Solved,time,Nodelist,NNodesVisited,solution)

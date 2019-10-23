@@ -86,7 +86,7 @@ def Breathfirst(Mapname,Map,NODE,visual):
     print("Goal reached")
     ok = False
 
-    Solution=[]
+    Solution=[Node(Map.getXgoal(),Map.getYgoal(),-5,None)]
     while not ok:
         for node in nodes:
             if( node.myId == goalParentId ):
@@ -205,7 +205,7 @@ def Greedy_Euclideo(Mapname,Map,NODE,visual):
     print("Goal reached")
     ok = False
 
-    Solution=[]
+    Solution=[Node(Map.getXgoal(),Map.getYgoal(),-5,None)]
     while not ok:
         for node in nodes:
             if( node.myId == goalParentId ):
@@ -323,7 +323,7 @@ def Greedy_Manhattan(Mapname,Map,NODE,visual):
     print("Goal reached")
     ok = False
 
-    Solution=[]
+    Solution=[Node(Map.getXgoal(),Map.getYgoal(),-5,None)]
     while not ok:
         for node in nodes:
             if( node.myId == goalParentId ):
@@ -432,7 +432,7 @@ def Dijkstra(Mapname,Map,NODE,visual):
     print("Goal reached")
     ok = False
 
-    Solution=[]
+    Solution=[Node(Map.getXgoal(),Map.getYgoal(),-5,None)]
     while not ok:
         for node in nodes:
             if( node.myId == goalParentId ):
@@ -537,7 +537,7 @@ def Random(Mapname,Map,NODE,visual):
     print("Goal reached")
     ok = False
 
-    Solution=[]
+    Solution=[Node(Map.getXgoal(),Map.getYgoal(),-5,None)]
     while not ok:
         for node in nodes:
             if( node.myId == goalParentId ):
@@ -650,7 +650,7 @@ def AEuclidean(Mapname,Map,NODE,visual):
     print("Goal reached")
     ok = False
 
-    Solution=[]
+    Solution=[Node(Map.getXgoal(),Map.getYgoal(),-5,None)]
     while not ok:
         for node in nodes:
             if( node.myId == goalParentId ):
@@ -764,7 +764,7 @@ def AManhattan(Mapname,Map,NODE,visual):
     print("Goal reached")
     ok = False
 
-    Solution=[]
+    Solution=[Node(Map.getXgoal(),Map.getYgoal(),-5,None)]
     while not ok:
         for node in nodes:
             if( node.myId == goalParentId ):
@@ -805,7 +805,7 @@ def BidireccionalM(Mapname,Map,NODE,visual):
     numberiter=0
     starttime= time.time()
     while not done:
-        numberiter=numberiter=0+1
+
         #select appropiate node
         updateDisplayclean(charMap,app,Fprint)
         #select node from start
@@ -818,6 +818,7 @@ def BidireccionalM(Mapname,Map,NODE,visual):
                 realcost=sc
                 cost=sc+abs(sn.x-x_goal)+abs(sn.y-y_goal)
         if candidatenode:
+            numberiter=numberiter+1
             candidatenodes.remove([candidatenode,realcost])
             print("Salida")
             print(str(candidatenode.x)+' '+str(candidatenode.y))
@@ -910,6 +911,7 @@ def BidireccionalM(Mapname,Map,NODE,visual):
                 costEnd=sce+abs(sne.x-x_start)+abs(sne.y-y_start)
 
         if candidatenodeEnd:
+            numberiter=numberiter+1
             candidatenodesEnd.remove([candidatenodeEnd,realcostEnd])
             print("meta")
             print(str(candidatenodeEnd.x)+' '+str(candidatenodeEnd.y))
@@ -1250,3 +1252,142 @@ def BidireccionalE(Mapname,Map,NODE,visual):
                         ok = True
     addsolutionclean(app,Solution)
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
+
+def Explorer(Mapname,Map,NODE,visual):
+    #set up
+    nodes = [NODE]
+    candidatenodes = [[NODE,0]]
+    goalParentId = -1
+    charMap = Map.getCharMap()
+    done = False
+    x_goal=Map.getXgoal()
+    y_goal=Map.getYgoal()
+    goalParentId = -1
+    cost=0;
+    #Start display dependencies
+    if visual:
+        [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"Explorer")
+    #start the algorithm
+    numberiter=0
+    starttime= time.time()
+    while not done:
+        numberiter=numberiter+1
+        #select appropiate node
+        if visual:
+            updateDisplayclean(charMap,app,Fprint)
+        cost=float("inf")
+        node = None
+        candidatenode=None
+        for sn,sc in candidatenodes:
+            if ((sc/(nnewnodes(sn,charMap)))+math.sqrt(pow(sn.x-x_goal,2)+pow(sn.y-y_goal,2))) < cost:
+                candidatenode=sn
+                realcost=sc
+                cost=((sc/(nnewnodes(sn,charMap)))+math.sqrt(pow(sn.x-x_goal,2)+pow(sn.y-y_goal,2)))
+            print(nnewnodes(sn,charMap)**2)
+            print((sc/(nnewnodes(sn,charMap)))+math.sqrt(pow(sn.x-x_goal,2)+pow(sn.y-y_goal,2)))
+        if candidatenode:
+            candidatenodes.remove([candidatenode,realcost])
+            #exploration
+            node = candidatenode
+            charMap[node.x][node.y]='5'
+            tmpX = node.x - 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("up: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("up: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,cost+1])
+
+            # down
+            tmpX = node.x + 1
+            tmpY = node.y
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("down: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("down: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,cost+1])
+
+            # right
+            tmpX = node.x
+            tmpY = node.y + 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("right: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("right    : mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,cost+1])
+
+            # left
+            tmpX = node.x
+            tmpY = node.y - 1
+            if( charMap[tmpX][tmpY] == '4' ):
+                print("left: GOALLLL!!!")
+                goalParentId = node.myId
+                done = True
+                break
+            elif ( charMap[tmpX][tmpY] == '0' ):
+                print("left: mark visited")
+                newNode = Node(tmpX, tmpY, len(nodes), node.myId)
+                charMap[tmpX][tmpY] = '2'
+                nodes.append(newNode)
+                candidatenodes.append([newNode,cost+1])
+        else:
+            break
+        print("------------------------------------------")
+
+    stoptime=time.time()
+    print("Goal reached")
+    ok = False
+
+    Solution=[Node(Map.getXgoal(),Map.getYgoal(),-5,None)]
+    while not ok:
+        for node in nodes:
+            if( node.myId == goalParentId ):
+                Solution.append(node)
+                goalParentId = node.parentId
+                if( goalParentId == -2):
+                    ok = True
+    addsolutionclean(app,Solution)
+    return[done,nodes,numberiter,Solution,-starttime+stoptime]
+
+def nnewnodes(node,charMap):
+    x=node.x
+    y=node.y
+    a=0
+    if charMap[x+1][y]=='0':
+        a=a+1
+    if charMap[x+1][y+1]=='0':
+            a=a+1
+    if charMap[x][y+1]=='0':
+            a=a+1
+    if charMap[x-1][y+1]=='0':
+            a=a+1
+    if charMap[x-1][y]=='0':
+            a=a+1
+    if charMap[x-1][y-1]=='0':
+            a=a+1
+    if charMap[x][y-1]=='0':
+            a=a+1
+    if charMap[x+1][y-1]=='0':
+            a=a+1
+    a/2
+    if a<1:
+        a=1
+    return a
