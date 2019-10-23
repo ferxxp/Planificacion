@@ -1242,9 +1242,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
                 goalParentId=node.myId
         while not ok:
             for node in nodes:
-                print(goalParentId)
                 if( node.myId == goalParentId ):
-                    print("stuck")
                     Solution.insert(0,node)
                     goalParentId = node.parentId
                     if( goalParentId == -3 or goalParentId == -2):
