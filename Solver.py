@@ -132,12 +132,13 @@ def Greedy_Euclideo(Mapname,Map,NODE,visual):
                 node_candidato = nodesearch
         #Node es ahora el candidato y lo expandimos en todas direcciones
         node = node_candidato
-        charMap[node.x][node.y]='5'
+
 
 
         #can not explore same node again
         if node:
             candidatenodes.remove(node)
+            charMap[node.x][node.y]='5'
             # up
             tmpX = node.x - 1
             tmpY = node.y
@@ -252,10 +253,10 @@ def Greedy_Manhattan(Mapname,Map,NODE,visual):
                 node_candidato = nodesearch
         #Node es ahora el candidato y lo expandimos en todas direcciones
         node = node_candidato
-        charMap[node.x][node.y]='5'
         #can not explore same node again
         if node:
             candidatenodes.remove(node)
+            charMap[node.x][node.y]='5'
             # up
             tmpX = node.x - 1
             tmpY = node.y
@@ -912,7 +913,7 @@ def BidireccionalM(Mapname,Map,NODE,visual):
             candidatenodesEnd.remove([candidatenodeEnd,realcostEnd])
             print("meta")
             print(str(candidatenodeEnd.x)+' '+str(candidatenodeEnd.y))
-            input("Press Enter to continue...")
+            #input("Press Enter to continue...")
             #exploration
             node = candidatenodeEnd
             charMap[node.x][node.y]='5'
