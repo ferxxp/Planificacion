@@ -94,7 +94,8 @@ def Breathfirst(Mapname,Map,NODE,visual):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
-    addsolutionclean(app,Solution)
+    if visual:
+        addsolutionclean(app,Solution)
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def Greedy_Euclideo(Mapname,Map,NODE,visual):
@@ -213,7 +214,8 @@ def Greedy_Euclideo(Mapname,Map,NODE,visual):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
-    addsolutionclean(app,Solution)
+    if visual:
+        addsolutionclean(app,Solution)
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def Greedy_Manhattan(Mapname,Map,NODE,visual):
@@ -331,7 +333,8 @@ def Greedy_Manhattan(Mapname,Map,NODE,visual):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
-    addsolutionclean(app,Solution)
+    if visual:
+        addsolutionclean(app,Solution)
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def Dijkstra(Mapname,Map,NODE,visual):
@@ -440,7 +443,8 @@ def Dijkstra(Mapname,Map,NODE,visual):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
-    addsolutionclean(app,Solution)
+    if visual:
+        addsolutionclean(app,Solution)
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def Random(Mapname,Map,NODE,visual):
@@ -545,7 +549,8 @@ def Random(Mapname,Map,NODE,visual):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
-    addsolutionclean(app,Solution)
+    if visual:
+        addsolutionclean(app,Solution)
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def AEuclidean(Mapname,Map,NODE,visual):
@@ -659,7 +664,8 @@ def AEuclidean(Mapname,Map,NODE,visual):
                 if( goalParentId == -2):
                     ok = True
 
-    addsolutionclean(app,Solution)
+    if visual:
+        addsolutionclean(app,Solution)
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def AManhattan(Mapname,Map,NODE,visual):
@@ -772,7 +778,8 @@ def AManhattan(Mapname,Map,NODE,visual):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
-    addsolutionclean(app,Solution)
+    if visual:
+        addsolutionclean(app,Solution)
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def BidireccionalM(Mapname,Map,NODE,visual):
@@ -796,7 +803,8 @@ def BidireccionalM(Mapname,Map,NODE,visual):
     candidatenodesEnd = [[endNode,0]]
 
     #Start display dependencies
-    [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"BidireccionalM")
+    if visual:
+        [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"BidireccionalM")
     #start the algorithm
     realcost=0;
     realcostEnd=0
@@ -807,7 +815,8 @@ def BidireccionalM(Mapname,Map,NODE,visual):
     while not done:
 
         #select appropiate node
-        updateDisplayclean(charMap,app,Fprint)
+        if visual:
+            updateDisplayclean(charMap,app,Fprint)
         #select node from start
         cost=float("inf")
         node = None
@@ -913,8 +922,6 @@ def BidireccionalM(Mapname,Map,NODE,visual):
         if candidatenodeEnd:
             numberiter=numberiter+1
             candidatenodesEnd.remove([candidatenodeEnd,realcostEnd])
-            print("meta")
-            print(str(candidatenodeEnd.x)+' '+str(candidatenodeEnd.y))
             #input("Press Enter to continue...")
             #exploration
             node = candidatenodeEnd
@@ -1014,7 +1021,8 @@ def BidireccionalM(Mapname,Map,NODE,visual):
                     goalParentId = node.parentId
                     if( goalParentId == -3 or goalParentId == -2):
                         ok = True
-    addsolutionclean(app,Solution)
+    if visual:
+        addsolutionclean(app,Solution)
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def BidireccionalE(Mapname,Map,NODE,visual):
@@ -1038,7 +1046,8 @@ def BidireccionalE(Mapname,Map,NODE,visual):
     candidatenodesEnd = [[endNode,0]]
 
     #Start display dependencies
-    [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"BidireccionalE")
+    if visual:
+        [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"BidireccionalE")
     #start the algorithm
     starttime= time.time()
     realcost=0;
@@ -1049,7 +1058,8 @@ def BidireccionalE(Mapname,Map,NODE,visual):
     while not done:
         numberiter=numberiter+1
         #select appropiate node
-        updateDisplayclean(charMap,app,Fprint)
+        if visual:
+            updateDisplayclean(charMap,app,Fprint)
         #select node from start
         cost=float("inf")
         node = None
@@ -1250,7 +1260,8 @@ def BidireccionalE(Mapname,Map,NODE,visual):
                     goalParentId = node.parentId
                     if( goalParentId == -3 or goalParentId == -2):
                         ok = True
-    addsolutionclean(app,Solution)
+    if visual:
+        addsolutionclean(app,Solution)
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def Explorer(Mapname,Map,NODE,visual):
@@ -1364,7 +1375,8 @@ def Explorer(Mapname,Map,NODE,visual):
                 goalParentId = node.parentId
                 if( goalParentId == -2):
                     ok = True
-    addsolutionclean(app,Solution)
+    if visual:
+        addsolutionclean(app,Solution)
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def nnewnodes(node,charMap):
