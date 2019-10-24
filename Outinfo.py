@@ -1,6 +1,6 @@
 
 def writetofile(CurrentMapDir,Solver,Solved,time,Nodelist,NNodesVisited,solution):
-    f=open("info_out.txt","a")
+    f=open("info_out_nv.txt","a")
     f.write('\n')
     f.write(CurrentMapDir+'\t,')
     f.write(Solver+',')
