@@ -17,12 +17,12 @@ while True:
                 print("mapa no valido")
         except ValueError:
             print("Input no valido")
-    print("0.-Breathfirst\n1.-Greedy_Euclideo\n2.-Greedy_Manhattan\n3.-Random\n4.-Dijkstra\n5.-AEuclidean\n6.-AManhattan\n7.-BidireccionalM\n8.-BidireccionalE\n9.-Explorer\n")
+    print("0.-Breathfirst\n1.-Greedy_Euclideo\n2.-Greedy_Manhattan\n3.-Random\n4.-Dijkstra\n5.-AEuclidean\n6.-AManhattan\n7.-BidireccionalM\n8.-BidireccionalE\n9.-Explorer\n10.-Mostrar Mapa")
     validinput=True
     while validinput:
         try:
             modes=int(input('Select Solver type:'))
-            if modes<10:
+            if modes<11:
                 validinput=False
             else:
                 print("Solver no valido")
@@ -91,3 +91,6 @@ while True:
         [Solved,Nodelist,NNodesVisited,solution,time]=Explorer(MApname,CurrentMap,InitialNode,True)
         #print info
         writetofile(MApname,"Explorer",Solved,time,Nodelist,NNodesVisited,solution)
+    elif modes==10:
+        [CurrentMap,InitialNode]=GetMAP(MApdirectory[modem])
+        Onlydisplay(MApname,CurrentMap,InitialNode,True)

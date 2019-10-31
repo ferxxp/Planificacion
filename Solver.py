@@ -6,7 +6,7 @@ import time
 import math
 import random
 def Breathfirst(Mapname,Map,NODE,visual):
-    #set up
+#set up-------------------------------------------------------------------------
     nodes = [NODE]
     goalParentId = -1
     charMap = Map.getCharMap()
@@ -15,7 +15,7 @@ def Breathfirst(Mapname,Map,NODE,visual):
     #Start display dependencies
     if visual:
         [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"Breathfirst")
-    #start the algorithm
+#start the algorithm------------------------------------------------------------
     starttime= time.time()
     numberiter=0
     for node in nodes:
@@ -25,7 +25,7 @@ def Breathfirst(Mapname,Map,NODE,visual):
         if visual:
             updateDisplayclean(charMap,app,Fprint)
 
-        # up
+        # up--------------------------------------------------------------------
         tmpX = node.x - 1
         tmpY = node.y
         if( charMap[tmpX][tmpY] == '4' ):
@@ -39,7 +39,7 @@ def Breathfirst(Mapname,Map,NODE,visual):
             charMap[tmpX][tmpY] = '2'
             nodes.append(newNode)
 
-        # down
+        # down------------------------------------------------------------------
         tmpX = node.x + 1
         tmpY = node.y
         if( charMap[tmpX][tmpY] == '4' ):
@@ -53,7 +53,7 @@ def Breathfirst(Mapname,Map,NODE,visual):
             charMap[tmpX][tmpY] = '2'
             nodes.append(newNode)
 
-        # right
+        # right-----------------------------------------------------------------
         tmpX = node.x
         tmpY = node.y + 1
         if( charMap[tmpX][tmpY] == '4' ):
@@ -67,7 +67,7 @@ def Breathfirst(Mapname,Map,NODE,visual):
             charMap[tmpX][tmpY] = '2'
             nodes.append(newNode)
 
-        # left
+        # left------------------------------------------------------------------
         tmpX = node.x
         tmpY = node.y - 1
         if( charMap[tmpX][tmpY] == '4' ):
@@ -81,7 +81,7 @@ def Breathfirst(Mapname,Map,NODE,visual):
             charMap[tmpX][tmpY] = '2'
             nodes.append(newNode)
         print("------------------------------------------")
-
+    # Goal reached create solution----------------------------------------------
     stoptime=time.time()
     print("Goal reached")
     ok = False
@@ -99,17 +99,17 @@ def Breathfirst(Mapname,Map,NODE,visual):
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def Greedy_Euclideo(Mapname,Map,NODE,visual):
-    #set up
+    #set up--------------------------------------------------------------------
     nodes = [NODE]
     candidatenodes=[NODE]
     goalParentId = -1
     charMap = Map.getCharMap()
     done = False
     goalParentId = -1
-    #Start display dependencies
+    #Start display dependencies-------------------------------------------------
     if visual:
         [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"Greedy_Euclideo")
-    #start the algorithm
+    #start the algorithm--------------------------------------------------------
     print(charMap)
     x_goal=Map.getXgoal()
     y_goal=Map.getYgoal()
@@ -121,26 +121,21 @@ def Greedy_Euclideo(Mapname,Map,NODE,visual):
         print("--------------------- number of nodes: "+str(len(candidatenodes)))
         if visual:
             updateDisplayclean(charMap,app,Fprint)
-        #para todos los nodos en nodes;si tu distancia a la meta es minima te expandes;el nodo mas cercano se expande;distancia sqrt((x-xi)^2 + ...)
-        #[x_goal, y_goal] = Map.getGoal() /// [por definir] Nos da los datos posicion de la meta
-        min_dist= 100000 #Valor grande, y que sabemos que no habra distancia en nuestros mapas mayor
+        min_dist= float("inf") #Valor grande, y que sabemos que no habra distancia en nuestros mapas mayor
         node = None
         node_candidato=None
+        #Select node------------------------------------------------------------
         for nodesearch in candidatenodes:
             posible_min= math.sqrt(pow(nodesearch.x-x_goal,2)+pow(nodesearch.y-y_goal,2))
             if (posible_min< min_dist):
                 min_dist=posible_min
                 node_candidato = nodesearch
-        #Node es ahora el candidato y lo expandimos en todas direcciones
         node = node_candidato
-
-
-
-        #can not explore same node again
+        #expansion del nodo-----------------------------------------------------
         if node:
             candidatenodes.remove(node)
             charMap[node.x][node.y]='5'
-            # up
+            # up----------------------------------------------------------------
             tmpX = node.x - 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' ):
@@ -155,7 +150,7 @@ def Greedy_Euclideo(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append(newNode)
 
-            # down
+            # down--------------------------------------------------------------
             tmpX = node.x + 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' ):
@@ -170,7 +165,7 @@ def Greedy_Euclideo(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append(newNode)
 
-            # right
+            # right-------------------------------------------------------------
             tmpX = node.x
             tmpY = node.y + 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -184,7 +179,7 @@ def Greedy_Euclideo(Mapname,Map,NODE,visual):
                 charMap[tmpX][tmpY] = '2'
                 nodes.append(newNode)
                 candidatenodes.append(newNode)
-             # left
+             # left-------------------------------------------------------------
             tmpX = node.x
             tmpY = node.y - 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -203,7 +198,7 @@ def Greedy_Euclideo(Mapname,Map,NODE,visual):
         print("------------------------------------------")
 
     stoptime=time.time()
-    print("Goal reached")
+    # Goal reached create solution----------------------------------------------
     ok = False
 
     Solution=[Node(Map.getXgoal(),Map.getYgoal(),-5,None)]
@@ -219,7 +214,7 @@ def Greedy_Euclideo(Mapname,Map,NODE,visual):
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def Greedy_Manhattan(Mapname,Map,NODE,visual):
-    #set up
+    #set up--------------------------------------------------------------------
     nodes = [NODE]
     candidatenodes=[NODE]
     goalParentId = -1
@@ -229,8 +224,7 @@ def Greedy_Manhattan(Mapname,Map,NODE,visual):
     #Start display dependencies
     if visual:
         [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"Greedy_Manhattan")
-    #start the algorithm
-
+    #start the algorithm--------------------------------------------------------
     print(charMap)
     x_goal=Map.getXgoal()
     y_goal=Map.getYgoal()
@@ -243,23 +237,22 @@ def Greedy_Manhattan(Mapname,Map,NODE,visual):
         print("--------------------- number of nodes: "+str(len(candidatenodes)))
         if visual:
             updateDisplayclean(charMap,app,Fprint)
-        #para todos los nodos en nodes;si tu distancia a la meta es minima te expandes;el nodo mas cercano se expande;distancia sqrt((x-xi)^2 + ...)
-        #[x_goal, y_goal] = Map.getGoal() /// [por definir] Nos da los datos posicion de la meta
-        min_dist= 100000 #Valor grande, y que sabemos que no habra distancia en nuestros mapas mayor
+        min_dist= float("inf")
         node = None
         node_candidato=None
+        #Select node------------------------------------------------------------
         for nodesearch in candidatenodes:
             posible_min= (abs(nodesearch.x-x_goal)+abs(nodesearch.y-y_goal))
             if (posible_min< min_dist):
                 min_dist=posible_min
                 node_candidato = nodesearch
-        #Node es ahora el candidato y lo expandimos en todas direcciones
         node = node_candidato
-        #can not explore same node again
+
+        #expansion del nodo-----------------------------------------------------
         if node:
             candidatenodes.remove(node)
             charMap[node.x][node.y]='5'
-            # up
+            # up--------------------------------------------
             tmpX = node.x - 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' ):
@@ -274,7 +267,7 @@ def Greedy_Manhattan(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append(newNode)
 
-            # down
+            # down--------------------------------------------
             tmpX = node.x + 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' ):
@@ -289,7 +282,7 @@ def Greedy_Manhattan(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append(newNode)
 
-            # right
+            # right--------------------------------------------
             tmpX = node.x
             tmpY = node.y + 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -303,7 +296,7 @@ def Greedy_Manhattan(Mapname,Map,NODE,visual):
                 charMap[tmpX][tmpY] = '2'
                 nodes.append(newNode)
                 candidatenodes.append(newNode)
-             # left
+             # left--------------------------------------------
             tmpX = node.x
             tmpY = node.y - 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -321,8 +314,8 @@ def Greedy_Manhattan(Mapname,Map,NODE,visual):
             break
         print("------------------------------------------")
 
+    # Goal reached create solution----------------------------------------------
     stoptime=time.time()
-    print("Goal reached")
     ok = False
 
     Solution=[Node(Map.getXgoal(),Map.getYgoal(),-5,None)]
@@ -338,7 +331,7 @@ def Greedy_Manhattan(Mapname,Map,NODE,visual):
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def Dijkstra(Mapname,Map,NODE,visual):
-    #set up
+    #set up---------------------------------------------------------------------
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
     goalParentId = -1
@@ -349,21 +342,22 @@ def Dijkstra(Mapname,Map,NODE,visual):
     #Start display dependencies
     if visual:
         [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"Dijkstra")
-    #start the algorithm
+    #start the algorithm--------------------------------------------------------
     numberiter=0
     starttime= time.time()
     while not done:
         numberiter=numberiter+1
-        #select appropiate node
         if visual:
             updateDisplayclean(charMap,app,Fprint)
         cost=float("inf")
         node = None
         candidatenode=None
+        #select appropiate node-------------------------------------------------
         for sn,sc in candidatenodes:
             if sc < cost:
                 candidatenode=sn
                 cost=sc
+        #expansion del nodo-----------------------------------------------------
         if candidatenode:
             candidatenodes.remove([candidatenode,cost])
             #exploration
@@ -383,7 +377,8 @@ def Dijkstra(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,cost+1])
 
-            # down
+            # down-------------------------------------------
+
             tmpX = node.x + 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' ):
@@ -398,7 +393,8 @@ def Dijkstra(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,cost+1])
 
-            # right
+            # right-------------------------------------------
+
             tmpX = node.x
             tmpY = node.y + 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -413,7 +409,8 @@ def Dijkstra(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,cost+1])
 
-            # left
+            # left-------------------------------------------
+
             tmpX = node.x
             tmpY = node.y - 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -431,6 +428,7 @@ def Dijkstra(Mapname,Map,NODE,visual):
             break
         print("------------------------------------------")
 
+    # Goal reached create solution----------------------------------------------
     stoptime=time.time()
     print("Goal reached")
     ok = False
@@ -448,7 +446,7 @@ def Dijkstra(Mapname,Map,NODE,visual):
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def Random(Mapname,Map,NODE,visual):
-    #set up
+    #set up---------------------------------------------------------------------
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
     goalParentId = -1
@@ -459,7 +457,7 @@ def Random(Mapname,Map,NODE,visual):
     #Start display dependencies
     if visual:
         [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"Random")
-    #start the algorithm
+    #start the algorithm--------------------------------------------------------
     numberiter=0
     starttime= time.time()
     while not done:
@@ -469,12 +467,14 @@ def Random(Mapname,Map,NODE,visual):
             updateDisplayclean(charMap,app,Fprint)
 
         if candidatenodes:
-            print(random.randint(0,len(candidatenodes)))
+            #Select node--------------------------------------------------------
             [candidatenode,ignore]=candidatenodes[random.randint(0,len(candidatenodes)-1)]
             candidatenodes.remove([candidatenode,ignore])
-            #exploration
+            #expansion del nodo-------------------------------------------------
             node = candidatenode
             charMap[node.x][node.y]='5'
+            #up----------------------------------------------
+
             tmpX = node.x - 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' ):
@@ -489,7 +489,8 @@ def Random(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,cost+1])
 
-            # down
+            # down----------------------------------------------
+
             tmpX = node.x + 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' ):
@@ -504,7 +505,8 @@ def Random(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,cost+1])
 
-            # right
+            # right----------------------------------------------
+
             tmpX = node.x
             tmpY = node.y + 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -519,7 +521,8 @@ def Random(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,cost+1])
 
-            # left
+            # left----------------------------------------------
+
             tmpX = node.x
             tmpY = node.y - 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -538,7 +541,7 @@ def Random(Mapname,Map,NODE,visual):
         print("------------------------------------------")
 
     stoptime=time.time()
-    print("Goal reached")
+    # Goal reached create solution----------------------------------------------
     ok = False
 
     Solution=[Node(Map.getXgoal(),Map.getYgoal(),-5,None)]
@@ -554,7 +557,8 @@ def Random(Mapname,Map,NODE,visual):
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def AEuclidean(Mapname,Map,NODE,visual):
-    #set up
+    #set up-------------------------------------------------------------------------
+
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
     goalParentId = -1
@@ -567,10 +571,11 @@ def AEuclidean(Mapname,Map,NODE,visual):
     #Start display dependencies
     if visual:
         [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"AEuclidean")
-    #start the algorithm
     numberiter=0
     starttime= time.time()
     realcost=0
+    #start the algorithm--------------------------------------------------------
+
     while not done:
         numberiter=numberiter+1
         #select appropiate node
@@ -579,14 +584,16 @@ def AEuclidean(Mapname,Map,NODE,visual):
         cost=float("inf")
         node = None
         candidatenode=None
+        #Select node------------------------------------------------------------
         for sn,sc in candidatenodes:
             if (sc+math.sqrt(pow(sn.x-x_goal,2)+pow(sn.y-y_goal,2))) < cost:
                 candidatenode=sn
                 realcost=sc
                 cost=sc+math.sqrt(pow(sn.x-x_goal,2)+pow(sn.y-y_goal,2))
+        #expansion del nodo-----------------------------------------------------
         if candidatenode:
             candidatenodes.remove([candidatenode,realcost])
-            #exploration
+            #up----------------------------------------------
             node = candidatenode
             charMap[node.x][node.y]='5'
             tmpX = node.x - 1
@@ -603,7 +610,8 @@ def AEuclidean(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,realcost+1])
 
-            # down
+            # down----------------------------------------------
+
             tmpX = node.x + 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' ):
@@ -618,7 +626,8 @@ def AEuclidean(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,realcost+1])
 
-            # right
+            # right----------------------------------------------
+
             tmpX = node.x
             tmpY = node.y + 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -633,7 +642,8 @@ def AEuclidean(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,realcost+1])
 
-            # left
+            # left----------------------------------------------
+
             tmpX = node.x
             tmpY = node.y - 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -651,6 +661,7 @@ def AEuclidean(Mapname,Map,NODE,visual):
             break
         print("------------------------------------------")
 
+    # Goal reached create solution----------------------------------------------
     stoptime=time.time()
     print("Goal reached")
     ok = False
@@ -669,7 +680,8 @@ def AEuclidean(Mapname,Map,NODE,visual):
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def AManhattan(Mapname,Map,NODE,visual):
-    #set up
+    #set up---------------------------------------------------------------------
+
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
     goalParentId = -1
@@ -682,7 +694,7 @@ def AManhattan(Mapname,Map,NODE,visual):
     #Start display dependencies
     if visual:
         [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"AManhattan")
-    #start the algorithm
+#start the algorithm------------------------------------------------------------
     numberiter=0
     starttime= time.time()
     realcost=0;
@@ -694,16 +706,20 @@ def AManhattan(Mapname,Map,NODE,visual):
         cost=float("inf")
         node = None
         candidatenode=None
+        #Select node------------------------------------------------------------
         for sn,sc in candidatenodes:
             if (sc+abs(sn.x-x_goal)+abs(sn.y-y_goal)) < cost:
                 candidatenode=sn
                 realcost=sc
                 cost=sc+abs(sn.x-x_goal)+abs(sn.y-y_goal)
+        #expansion del nodo-----------------------------------------------------
         if candidatenode:
             candidatenodes.remove([candidatenode,realcost])
             #exploration
             node = candidatenode
             charMap[node.x][node.y]='5'
+            #up----------------------------------------------------------
+
             tmpX = node.x - 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' ):
@@ -718,7 +734,8 @@ def AManhattan(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,realcost+1])
 
-            # down
+            # down----------------------------------------------------------
+
             tmpX = node.x + 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' ):
@@ -733,7 +750,8 @@ def AManhattan(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,realcost+1])
 
-            # right
+            # right----------------------------------------------------------
+
             tmpX = node.x
             tmpY = node.y + 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -748,7 +766,8 @@ def AManhattan(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,realcost+1])
 
-            # left
+            # left----------------------------------------------------------
+
             tmpX = node.x
             tmpY = node.y - 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -765,7 +784,7 @@ def AManhattan(Mapname,Map,NODE,visual):
         else:
             break
         print("------------------------------------------")
-
+    # Goal reached create solution----------------------------------------------
     stoptime=time.time()
     print("Goal reached")
     ok = False
@@ -783,7 +802,7 @@ def AManhattan(Mapname,Map,NODE,visual):
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def BidireccionalM(Mapname,Map,NODE,visual):
-    #set up
+#set up-------------------------------------------------------------------------
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
     goalParentId = -1
@@ -812,27 +831,27 @@ def BidireccionalM(Mapname,Map,NODE,visual):
     nodey=0
     numberiter=0
     starttime= time.time()
+#start the algorithm------------------------------------------------------------
     while not done:
-
-        #select appropiate node
         if visual:
             updateDisplayclean(charMap,app,Fprint)
         #select node from start
         cost=float("inf")
         node = None
         candidatenode=None
+        #Select node start------------------------------------------------------
         for sn,sc in candidatenodes:
             if (sc+abs(sn.x-x_goal)+abs(sn.y-y_goal)) < cost:
                 candidatenode=sn
                 realcost=sc
                 cost=sc+abs(sn.x-x_goal)+abs(sn.y-y_goal)
+        #expansion del nodo salida----------------------------------------------
         if candidatenode:
             numberiter=numberiter+1
             candidatenodes.remove([candidatenode,realcost])
             print("Salida")
             print(str(candidatenode.x)+' '+str(candidatenode.y))
-            #input("Press Enter to continue...")
-            #exploration
+            #up---------------------------------------------
             node = candidatenode
             charMap[node.x][node.y]='5'
             tmpX = node.x - 1
@@ -851,7 +870,8 @@ def BidireccionalM(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,realcost+1])
 
-            # down
+            # down---------------------------------------------
+
             tmpX = node.x + 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@' ):
@@ -868,7 +888,8 @@ def BidireccionalM(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,realcost+1])
 
-            # right
+            # right---------------------------------------------
+
             tmpX = node.x
             tmpY = node.y + 1
             if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@'):
@@ -885,7 +906,8 @@ def BidireccionalM(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,realcost+1])
 
-            # left
+            # left---------------------------------------------
+
             tmpX = node.x
             tmpY = node.y - 1
             if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@'):
@@ -908,7 +930,7 @@ def BidireccionalM(Mapname,Map,NODE,visual):
 
 
 
-        #select node from end
+        #select node from end---------------------------------------------------
         costEnd=1000
         node = None
         candidatenodeEnd=None
@@ -918,12 +940,13 @@ def BidireccionalM(Mapname,Map,NODE,visual):
                 candidatenodeEnd=sne
                 realcostEnd=sce
                 costEnd=sce+abs(sne.x-x_start)+abs(sne.y-y_start)
-
+        #expansion del nodo end-------------------------------------------------
         if candidatenodeEnd:
             numberiter=numberiter+1
             candidatenodesEnd.remove([candidatenodeEnd,realcostEnd])
             #input("Press Enter to continue...")
-            #exploration
+            #up-----------------------------------------------------
+
             node = candidatenodeEnd
             charMap[node.x][node.y]='5'
             tmpX = node.x - 1
@@ -942,7 +965,7 @@ def BidireccionalM(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodesEnd.append([newNode,realcostEnd+1])
 
-            # down
+            # down---------------------------------------------
             tmpX = node.x + 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '3'or charMap[tmpX][tmpY] == '2' ):
@@ -959,7 +982,7 @@ def BidireccionalM(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodesEnd.append([newNode,realcostEnd+1])
 
-            # right
+            # right---------------------------------------------
             tmpX = node.x
             tmpY = node.y + 1
             if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'):
@@ -976,7 +999,7 @@ def BidireccionalM(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodesEnd.append([newNode,realcostEnd+1])
 
-            # left
+            # left---------------------------------------------
             tmpX = node.x
             tmpY = node.y - 1
             if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'):
@@ -996,7 +1019,7 @@ def BidireccionalM(Mapname,Map,NODE,visual):
             break
         print("------------------------------------------")
 
-
+    # Goal reached create solution----------------------------------------------
     stoptime=time.time()
     Solution=[]
     if done:
@@ -1026,7 +1049,7 @@ def BidireccionalM(Mapname,Map,NODE,visual):
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def BidireccionalE(Mapname,Map,NODE,visual):
-    #set up
+#set up-------------------------------------------------------------------------
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
     goalParentId = -1
@@ -1048,7 +1071,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
     #Start display dependencies
     if visual:
         [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"BidireccionalE")
-    #start the algorithm
+    #start the algorithm--------------------------------------------------------
     starttime= time.time()
     realcost=0;
     realcostEnd=0
@@ -1060,7 +1083,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
         #select appropiate node
         if visual:
             updateDisplayclean(charMap,app,Fprint)
-        #select node from start
+        #select node from start-------------------------------------------------
         cost=float("inf")
         node = None
         candidatenode=None
@@ -1069,15 +1092,16 @@ def BidireccionalE(Mapname,Map,NODE,visual):
                 candidatenode=sn
                 realcost=sc
                 cost=sc+math.sqrt(pow(sn.x-x_goal,2)+pow(sn.y-y_goal,2))
+        #expansion del nodo-----------------------------------------------------
         if candidatenode:
             candidatenodes.remove([candidatenode,realcost])
             print("Salida")
-            #exploration
+            #up----------------------------------------------------
             node = candidatenode
             charMap[node.x][node.y]='5'
             tmpX = node.x - 1
             tmpY = node.y
-            if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@' ): # or charMap[tmpX][tmpY] == 2e
+            if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@' ):
                 print("up: GOALLLL!!!")
                 goalParentId = node.myId
                 done = True
@@ -1091,7 +1115,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,realcost+1])
 
-            # down
+            # down----------------------------------------------------
             tmpX = node.x + 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@' ):
@@ -1108,7 +1132,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,realcost+1])
 
-            # right
+            # right----------------------------------------------------
             tmpX = node.x
             tmpY = node.y + 1
             if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@'):
@@ -1125,7 +1149,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,realcost+1])
 
-            # left
+            # left----------------------------------------------------
             tmpX = node.x
             tmpY = node.y - 1
             if( charMap[tmpX][tmpY] == '4' or charMap[tmpX][tmpY] == '@'):
@@ -1148,7 +1172,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
 
 
 
-        #select node from end
+        #select node from end---------------------------------------------------
         costEnd=float("inf")
         node = None
         candidatenodeEnd=None
@@ -1162,7 +1186,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
         if candidatenodeEnd:
             candidatenodesEnd.remove([candidatenodeEnd,realcostEnd])
             print("meta")
-            #exploration
+            #up----------------------------------------------------
             node = candidatenodeEnd
             charMap[node.x][node.y]='5'
             tmpX = node.x - 1
@@ -1181,7 +1205,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodesEnd.append([newNode,realcostEnd+1])
 
-            # down
+            # down----------------------------------------------------
             tmpX = node.x + 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '3'or charMap[tmpX][tmpY] == '2' ):
@@ -1198,7 +1222,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodesEnd.append([newNode,realcostEnd+1])
 
-            # right
+            # right----------------------------------------------------
             tmpX = node.x
             tmpY = node.y + 1
             if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'):
@@ -1215,7 +1239,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodesEnd.append([newNode,realcostEnd+1])
 
-            # left
+            # left----------------------------------------------------
             tmpX = node.x
             tmpY = node.y - 1
             if( charMap[tmpX][tmpY] == '3' or charMap[tmpX][tmpY] == '2'):
@@ -1235,7 +1259,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
             break
         print("------------------------------------------")
 
-
+    # Goal reached create solution----------------------------------------------
     stoptime=time.time()
     Solution=[]
     if done:
@@ -1265,7 +1289,7 @@ def BidireccionalE(Mapname,Map,NODE,visual):
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
 
 def Explorer(Mapname,Map,NODE,visual):
-    #set up
+#set up-------------------------------------------------------------------------
     nodes = [NODE]
     candidatenodes = [[NODE,0]]
     goalParentId = -1
@@ -1278,17 +1302,17 @@ def Explorer(Mapname,Map,NODE,visual):
     #Start display dependencies
     if visual:
         [app,Fprint,label]=StartDisplayclean(charMap,Mapname,"Explorer")
-    #start the algorithm
+#start the algorithm------------------------------------------------------------
     numberiter=0
     starttime= time.time()
     while not done:
         numberiter=numberiter+1
-        #select appropiate node
         if visual:
             updateDisplayclean(charMap,app,Fprint)
         cost=float("inf")
         node = None
         candidatenode=None
+        #Select node -----------------------------------------------------------
         for sn,sc in candidatenodes:
             if ((sc/(nnewnodes(sn,charMap)))+math.sqrt(pow(sn.x-x_goal,2)+pow(sn.y-y_goal,2))) < cost:
                 candidatenode=sn
@@ -1296,9 +1320,10 @@ def Explorer(Mapname,Map,NODE,visual):
                 cost=((sc/(nnewnodes(sn,charMap)))+math.sqrt(pow(sn.x-x_goal,2)+pow(sn.y-y_goal,2)))
             print(nnewnodes(sn,charMap)**2)
             print((sc/(nnewnodes(sn,charMap)))+math.sqrt(pow(sn.x-x_goal,2)+pow(sn.y-y_goal,2)))
+        #expansion del nodo ----------------------------------------------------
         if candidatenode:
             candidatenodes.remove([candidatenode,realcost])
-            #exploration
+            #up-----------------------------------------------------
             node = candidatenode
             charMap[node.x][node.y]='5'
             tmpX = node.x - 1
@@ -1315,7 +1340,7 @@ def Explorer(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,cost+1])
 
-            # down
+            # down-----------------------------------------------------
             tmpX = node.x + 1
             tmpY = node.y
             if( charMap[tmpX][tmpY] == '4' ):
@@ -1330,7 +1355,7 @@ def Explorer(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,cost+1])
 
-            # right
+            # right-----------------------------------------------------
             tmpX = node.x
             tmpY = node.y + 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -1345,7 +1370,7 @@ def Explorer(Mapname,Map,NODE,visual):
                 nodes.append(newNode)
                 candidatenodes.append([newNode,cost+1])
 
-            # left
+            # left-----------------------------------------------------
             tmpX = node.x
             tmpY = node.y - 1
             if( charMap[tmpX][tmpY] == '4' ):
@@ -1378,6 +1403,12 @@ def Explorer(Mapname,Map,NODE,visual):
     if visual:
         addsolutionclean(app,Solution)
     return[done,nodes,numberiter,Solution,-starttime+stoptime]
+
+def Onlydisplay(Mapname,Map,NODE,visual):
+    charMap = Map.getCharMap()
+    if visual:
+        [app,Fprint,label]=StartDisplayclean(charMap,Mapname," ")
+        updateDisplayclean(charMap,app,Fprint)
 
 def nnewnodes(node,charMap):
     x=node.x

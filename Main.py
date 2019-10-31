@@ -3,7 +3,7 @@ from Outinfo import *
 from Solver import *
 
 MApdirectory= Maplist(filedirector)
-Vis=False
+Vis=True
 
 for CurrentMapDir in MApdirectory:
     print(CurrentMapDir)
